@@ -7,10 +7,10 @@
 </template>
 
 <script>
-import BScroll from 'better-scroll';
+import BScroll from "better-scroll";
 
 export default {
-  name: 'Scroll',
+  name: "Scroll",
   props: {
     probeType: {
       type: Number,
@@ -30,6 +30,10 @@ export default {
       type: Number,
       default: 20,
     },
+    listenSCroll: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -45,14 +49,14 @@ export default {
     });
     // 监听滚动位置
     if (this.probeType === 2 || this.probeType === 3) {
-      this.scroll.on('scroll', (position) => {
-        this.$emit('scroll', position);
+      this.scroll.on("scroll", (position) => {
+        this.$emit("scroll", position);
       });
     }
     // 监听上拉事件
     if (this.pullUpLoad) {
-      this.scroll.on('pullingUp', () => {
-        this.$emit('pullingUp');
+      this.scroll.on("pullingUp", () => {
+        this.$emit("pullingUp");
         this.scroll.finishPullUp();
       });
     }
@@ -60,6 +64,9 @@ export default {
   methods: {
     scrollTo(x, y, time = 300) {
       this.scroll && this.scroll.scrollTo(x, y, time);
+    },
+    scrollToElement(el, time) {
+      this.scroll && this.scroll.scrollToElement(el, time);
     },
     refresh() {
       this.scroll && this.scroll.refresh();

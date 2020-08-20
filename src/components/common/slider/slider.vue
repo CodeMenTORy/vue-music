@@ -15,78 +15,78 @@
 </template>
 
 <script type="text/ecmascript-6">
-import {addClass} from 'common/js/dom'
-import BScroll from 'better-scroll'
+import { addClass } from "common/js/dom";
+import BScroll from "better-scroll";
 
 export default {
-  name: 'slider',
+  name: "slider",
   props: {
     // 是否循环轮播
     loop: {
       type: Boolean,
-      default: true
+      default: true,
     },
     // 是否自动播放
     autoPlay: {
       type: Boolean,
-      default: true
+      default: true,
     },
     // 播放间隔
     interval: {
       type: Number,
-      default: 4000
-    }
+      default: 4000,
+    },
   },
   data() {
     return {
       children: [],
-      dots:[],
+      dots: [],
       currentPageIndex: 0,
-      slider: {}
-    }
+      slider: {},
+    };
   },
-  mounted(){
+  mounted() {
     setTimeout(() => {
-        // 计算宽度
-      this._setSilderWidth()
+      // 计算宽度
+      this._setSilderWidth();
       // 初始化dots
-      this._initDots()
+      this._initDots();
       // 初始化slider
-      this._initSlider()
+      this._initSlider();
       // 自动轮播
-      if(this.autoPlay){
-        this._play()
+      if (this.autoPlay) {
+        this._play();
       }
-    }, 20)
+    }, 20);
 
-    window.addEventListener('resize', () => {
-      if(!this.slider){
-        return
+    window.addEventListener("resize", () => {
+      if (!this.slider) {
+        return;
       }
-      this._setSilderWidth(true)
-      this.slider.refresh()
-    })
+      this._setSilderWidth(true);
+      this.slider.refresh();
+    });
   },
-  methods:{
-    _setSilderWidth(isRize){
-      this.children = this.$refs.sliderGroup.children
+  methods: {
+    _setSilderWidth(isRize) {
+      this.children = [...this.$refs.sliderGroup.children];
 
-      let width = 0
-      let sliderWidth = this.$refs.slider.clientWidth
-      for(let i =0; i < this.children.length; i++){
-        let child = this.children[i]
-        addClass(child, 'slider-item')
+      let width = 0;
+      let sliderWidth = this.$refs.slider.clientWidth;
+      for (let i = 0; i < this.children.length; i++) {
+        let child = this.children[i];
+        addClass(child, "slider-item");
 
-        child.style.width = sliderWidth + 'px'
-        width += sliderWidth
+        child.style.width = sliderWidth + "px";
+        width += sliderWidth;
       }
-      if(this.loop && !isRize){
+      if (this.loop && !isRize) {
         // 如果轮播，则左右两边需要增加宽度
-        width += 2 * sliderWidth
+        width += 2 * sliderWidth;
       }
-      this.$refs.sliderGroup.style.width = width + 'px'
+      this.$refs.sliderGroup.style.width = width + "px";
     },
-    _initSlider(){
+    _initSlider() {
       this.slider = new BScroll(this.$refs.slider, {
         scrollX: true,
         scrollY: false,
@@ -94,91 +94,106 @@ export default {
         snap: {
           loop: this.loop,
           speed: 400,
-          threshold: 0.3
+          threshold: 0.3,
         },
-        click:true
-      })
+        click: true,
+      });
 
       // 绑定滚动结束的事件
-      this.slider.on('scrollEnd', () => {
-        let pageIndex = this.slider.getCurrentPage().pageX
-        this.currentPageIndex = pageIndex
+      this.slider.on("scrollEnd", () => {
+        let pageIndex = this.slider.getCurrentPage().pageX;
+        this.currentPageIndex = pageIndex;
 
         // 结束后重新调用_play
-        if(this.autoPlay){
-          clearTimeout(this.timer)
-          this._play()
+        if (this.autoPlay) {
+          clearTimeout(this.timer);
+          this._play();
         }
-      })
+      });
     },
-    _initDots(){
-      this.dots = new Array(this.children.length)
+    _initDots() {
+      this.dots = new Array(this.children.length);
     },
     // 设置滚动
-    _play(){
-      let pageIndex = this.currentPageIndex + 1
-      if(pageIndex === 8){
-        pageIndex = 0
+    _play() {
+      let pageIndex = this.currentPageIndex + 1;
+      if (pageIndex === this.children.length) {
+        pageIndex = 0;
       }
       this.timer = setTimeout(() => {
-        this.slider.goToPage(pageIndex, 0, 400)
-      }, 1000)
-    }
+        this.slider.goToPage(pageIndex, 0, 400);
+      }, 1000);
+    },
   },
   activated() {
     if (this.autoPlay) {
-      this._play()
+      this._play();
     }
   },
   deactivated() {
-    clearTimeout(this.timer)
+    clearTimeout(this.timer);
   },
-  destroyed(){
-    clearTimeout(this.timer)
-  }
-}
+  destroyed() {
+    clearTimeout(this.timer);
+  },
+};
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
-@import "~common/stylus/variable"
+@import '~common/stylus/variable';
 
-.slider
-  min-height: 1px
-  position:relative
-  overflow hidden
-  .slider-group
-    position: relative
-    overflow: hidden
-    white-space: nowrap
-    .slider-item
-      float: left
-      box-sizing: border-box
-      overflow: hidden
-      text-align: center
-      a
-        display: block
-        width: 100%
-        overflow: hidden
-        text-decoration: none
-      img
-        display: block
-        width: 100%
-  .dots
-    position: absolute
-    right: 0
-    left: 0
-    bottom: 12px
-    text-align: center
-    font-size: 0
-    .dot
-      display: inline-block
-      margin: 0 4px
-      width: 8px
-      height: 8px
-      border-radius: 50%
-      background: $color-text-l
-      &.active
-        width: 20px
-        border-radius: 5px
-        background: $color-text-ll
+.slider {
+  min-height: 1px;
+  position: relative;
+  overflow: hidden;
+
+  .slider-group {
+    position: relative;
+    overflow: hidden;
+    white-space: nowrap;
+
+    .slider-item {
+      float: left;
+      box-sizing: border-box;
+      overflow: hidden;
+      text-align: center;
+
+      a {
+        display: block;
+        width: 100%;
+        overflow: hidden;
+        text-decoration: none;
+      }
+
+      img {
+        display: block;
+        width: 100%;
+      }
+    }
+  }
+
+  .dots {
+    position: absolute;
+    right: 0;
+    left: 0;
+    bottom: 12px;
+    text-align: center;
+    font-size: 0;
+
+    .dot {
+      display: inline-block;
+      margin: 0 4px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: $color-text-l;
+
+      &.active {
+        width: 20px;
+        border-radius: 5px;
+        background: $color-text-ll;
+      }
+    }
+  }
+}
 </style>

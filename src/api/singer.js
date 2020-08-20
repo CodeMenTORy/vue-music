@@ -6,13 +6,14 @@ export function getIndexCategory() {
   });
 }
 
-export function getSingerList(index) {
+export function getSingerList(index, areaId = 200, pageSize = 10) {
   return request({
     url: '/artist/list',
     params: {
-      index,
       // 只显示内陆
-      areaID: 200,
+      areaId,
+      index,
+      pageSize,
     },
   });
 }
