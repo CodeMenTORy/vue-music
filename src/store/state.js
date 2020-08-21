@@ -8,4 +8,5 @@ export default {
   sequenceList: [],  // 顺序播放列表
   mode: playMode.sequence,  // 播放模式
   currentIndex: -1, // 目前歌曲
+  disc: {}, // 歌单
 };

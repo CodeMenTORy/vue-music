@@ -11,3 +11,12 @@ export function getDiscList() {
     url: '/songList/hot',
   });
 }
+
+export function getSongList(dissid) {
+  return request({
+    url: '/songList',
+    params: {
+      id: dissid,
+    },
+  });
+}

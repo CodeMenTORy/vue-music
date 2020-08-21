@@ -30,14 +30,16 @@ export default class Song {
 
 export function createSong(musicData) {
   return new Song({
-    id: musicData.songid,
-    mid: musicData.songmid,
+    id: musicData.songid || musicData.id,
+    mid: musicData.songmid || musicData.mid,
     singer: filterSinger(musicData.singer),
-    name: musicData.songname,
-    album: musicData.albumname,
+    name: musicData.songname || musicData.title,
+    album: musicData.albumname || musicData.album.name,
     duration: musicData.interval,
-    image: `https://api.itooi.cn/tencent/pic?id=${musicData.songmid}`,
-    url: `https://api.itooi.cn/tencent/url?id=${musicData.songmid}&quality=flac`,
+    image: `https://api.itooi.cn/tencent/pic?id=${musicData.songmid ||
+      musicData.mid}`,
+    url: `https://api.itooi.cn/tencent/url?id=${musicData.songmid ||
+      musicData.mid}&quality=flac`,
   });
 }
 
