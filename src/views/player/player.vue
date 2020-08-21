@@ -220,7 +220,7 @@ export default {
       this.setPlayingState(!this.playing);
       // 当音乐暂停/播放时，也要切换this.currentLyric的状态
       if (this.currentLyric) {
-        this.currentLyric.play();
+        this.currentLyric.togglePlay();
       }
     },
     end() {

@@ -177,6 +177,10 @@ export default {
     _scrollTo(index) {
       this.$refs.listview.scrollToElement(this.$refs.listgroup[index], 0);
     },
+    // 暴露scrol 的refresh 接口
+    refresh() {
+      this.$refs.listview.refresh()
+    }
   },
 };
 </script>
@@ -193,7 +197,7 @@ export default {
     position: fixed;
     z-index: 30;
     right: 0;
-    top: calc(50% + 44px);
+    top: calc(50% + 15px);
     transform: translateY(-50%);
     width: 20px;
     padding: 20px 0;
