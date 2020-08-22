@@ -33,6 +33,9 @@ export default {
   created() {
     this._getSingerDetail();
   },
+  activated() {
+    this._getSingerDetail();
+  },
   methods: {
     _getSingerDetail() {
       if (!this.singer.singer_mid) {
@@ -40,9 +43,7 @@ export default {
         return;
       }
       getSingerDetail(this.singer.singer_mid).then((res) => {
-        console.log(res);
         this.songs = this._normalizeSongs(res.data);
-        console.log(this.songs);
       });
     },
     _normalizeSongs(list) {

@@ -22,7 +22,7 @@
       @scroll="scroll"
     >
       <div class="song-list-wrapper">
-        <song-list @select="selectItem" :songs="songs"></song-list>
+        <song-list @select="selectItem" :songs="songs" :rank="rank"></song-list>
       </div>
       <div class="loading-container" v-show="!songs.length">
         <loading></loading>
@@ -32,25 +32,25 @@
 </template>
 
 <script>
-import Scroll from 'components/common/scroll/scroll';
-import SongList from 'components/content/song-list/songList';
-import Loading from 'components/common/loading/loading';
+import Scroll from "components/common/scroll/scroll";
+import SongList from "components/content/song-list/songList";
+import Loading from "components/common/loading/loading";
 
-import { prefixStyle } from 'common/js/dom';
-import { mapActions } from 'vuex';
-import { playlistMixin } from 'common/js/mixin';
+import { prefixStyle } from "common/js/dom";
+import { mapActions } from "vuex";
+import { playlistMixin } from "common/js/mixin";
 
 const RESERVED_HEIGHT = 40;
-const transform = prefixStyle('transform');
-const backdrop = prefixStyle('backdrop-filter');
+const transform = prefixStyle("transform");
+const backdrop = prefixStyle("backdrop-filter");
 
 export default {
-  name: 'musicList',
+  name: "musicList",
   mixins: [playlistMixin],
   props: {
     bgImage: {
       type: String,
-      default: '',
+      default: "",
     },
     songs: {
       type: Array,
@@ -60,7 +60,11 @@ export default {
     },
     title: {
       type: String,
-      default: '',
+      default: "",
+    },
+    rank: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {
@@ -93,7 +97,7 @@ export default {
     back() {
       this.$router.back();
     },
-    ...mapActions(['selectPlay', 'randomPlay']),
+    ...mapActions(["selectPlay", "randomPlay"]),
     selectItem(song, index) {
       this.selectPlay({
         list: this.songs,
@@ -106,7 +110,7 @@ export default {
       });
     },
     handlePlaylist(playlist) {
-      const bottom = playlist.length > 0 ? '60px' : '';
+      const bottom = playlist.length > 0 ? "60px" : "";
       this.$refs.list.$el.style.bottom = bottom;
       this.$refs.list.refresh();
     },
@@ -130,12 +134,12 @@ export default {
         this.$refs.bgImage.style.paddingTop = 0;
         this.$refs.bgImage.style.height = `${RESERVED_HEIGHT}px`;
         // 播放按钮消失
-        this.$refs.btn.style.display = 'none';
+        this.$refs.btn.style.display = "none";
       } else {
         // 没有拉到顶端时，恢复原样
-        this.$refs.bgImage.style.paddingTop = '70%';
+        this.$refs.bgImage.style.paddingTop = "70%";
         this.$refs.bgImage.style.height = 0;
-        this.$refs.btn.style.display = '';
+        this.$refs.btn.style.display = "";
       }
 
       // 设置图片随列表拖动缩放
@@ -150,7 +154,7 @@ export default {
       }
       // 修改模糊
       this.$refs.filter.style[backdrop] = `blur(${blur}px)`;
-      this.$refs.filter.style['backdrop-filter'] = `blur(${blur}px)`;
+      this.$refs.filter.style["backdrop-filter"] = `blur(${blur}px)`;
 
       // 修改层级关系
       this.$refs.bgImage.style.zIndex = zIndex;
