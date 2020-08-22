@@ -9,6 +9,30 @@
 <script>
 export default {
   name: "searchBox",
+  props: {
+    placeholder: {
+      type: String,
+      default: "搜索歌曲、歌手",
+    },
+  },
+  data() {
+    return {
+      query: "",
+    };
+  },
+  methods: {
+    clear() {
+      this.query = "";
+    },
+    setQuery(query) {
+      this.query = query;
+    },
+  },
+  created() {
+    this.$watch("query", (newQuery) => {
+      this.$emit("query", newQuery);
+    });
+  },
 };
 </script>
 
@@ -19,7 +43,8 @@ export default {
   display: flex;
   align-items: center;
   box-sizing: border-box;
-  width: 100%;
+  // width: 100%;
+  margin: 15px 5% 0 5%;
   padding: 0 6px;
   height: 40px;
   background: $color-highlight-background;

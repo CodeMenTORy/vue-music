@@ -46,6 +46,10 @@ const routes = [
     path: '/search',
     component: Search,
   },
+  {
+    path: '/search/:id',
+    component: SingerDetail,
+  },
 ];
 
 const router = new VueRouter({
