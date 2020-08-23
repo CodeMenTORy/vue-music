@@ -125,7 +125,7 @@
     <audio
       :src="currentSong.url"
       ref="audio"
-      @canplay="ready"
+      @play="ready"
       @error="error"
       @timeupdate="updataTime"
       @ended="end"
@@ -236,6 +236,7 @@ export default {
       // 边界情况，当只有一首歌时变成循环播放
       if (this.playlist.length === 1) {
         this.loop();
+        return
       } else {
         let index = this.currentIndex + 1;
         if (index === this.playlist.length) {
@@ -246,8 +247,8 @@ export default {
         if (!this.playing) {
           this.togglePlaying();
         }
-        this.songReady = false;
       }
+      this.songReady = false;
     },
     prev() {
       // 当正在切换歌曲时，点击切换按钮失败
@@ -316,6 +317,9 @@ export default {
       this.currentSong
         .getLyric()
         .then((lyric) => {
+          if (this.currentSong.lyric !== lyric) {
+            return;
+          }
           this.currentLyric = new Lyric(lyric, this.handleLyric);
           if (this.playing) {
             this.currentLyric.play();
@@ -487,6 +491,9 @@ export default {
       // 切换歌曲时，如果已经有this.currentLyric对象，则停止，防止和之后的互相干扰
       if (this.currentLyric) {
         this.currentLyric.stop();
+        this.currentTime = 0;
+        this.playingLyric = '';
+        this.currentLineNum = 0;
       }
       this.$nextTick(() => {
         this.playPromise = this.$refs.audio.play();
