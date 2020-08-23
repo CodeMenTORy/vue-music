@@ -34,6 +34,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    beforeScroll: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -59,6 +63,11 @@ export default {
         this.$emit("pullingUp");
         this.scroll.finishPullUp();
       });
+    }
+    if(this.beforeScroll) {
+      this.scroll.on('beforeScroll', () => {
+        this.$emit('beforeScroll')
+      })
     }
   },
   methods: {

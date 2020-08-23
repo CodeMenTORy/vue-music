@@ -42,10 +42,12 @@ export default {
   created() {
     this._getMusicList();
   },
+  activated() {
+    this._getMusicList();
+  },
   methods: {
     _getMusicList() {
       getMusicList(this.topList.id).then((res) => {
-        console.log(res);
         this.songs = this._normalizaSongs(res.songlist);
       });
     },

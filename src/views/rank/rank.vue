@@ -27,7 +27,6 @@
         <loading></loading>
       </div>
     </scroll>
-    <router-view></router-view>
   </div>
 </template>
 
@@ -42,9 +41,6 @@ import Loading from "components/common/loading/loading";
 export default {
   name: "rank",
   mixins: [playlistMixin],
-  created() {
-    this._getRankList();
-  },
   data() {
     return {
       topList: [],
@@ -54,10 +50,12 @@ export default {
     Scroll,
     Loading,
   },
+  created() {
+    this._getRankList();
+  },
   methods: {
     _getRankList() {
       getTopList().then((res) => {
-        console.log(res);
         this.topList = res.data.topList;
       });
     },
