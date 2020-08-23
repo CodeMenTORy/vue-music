@@ -143,6 +143,7 @@ export default {
         this._checkMore(res.data);
       });
     },
+    // 点击搜索结果
     selectItem(item) {
       if (item.type === TYPE_SINGER) {
         const singer = new Singer({
@@ -156,10 +157,15 @@ export default {
       } else {
         this.insertSong(item);
       }
+      this.$emit("select");
     },
     // 监听列表滚动
     listScroll() {
       this.$emit("listScroll");
+    },
+    // 代理scroll刷新方法给外部使用
+    refresh() {
+      this.$refs.suggest.refresh()
     },
     ...mapMutations({
       setSinger: "SET_SINGER",
