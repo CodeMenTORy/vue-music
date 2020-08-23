@@ -8,6 +8,7 @@ const Search = () => import('views/search/search');
 const SingerDetail = () => import('views/singerDetail/singerDetail');
 const Disc = () => import('views/recommend/childRecommend/disc/disc');
 const TopList = () => import('views/rank/childRank/top-list/topList');
+const UserCenter = () => import('views/user-center/userCenter')
 
 Vue.use(VueRouter);
 
@@ -50,6 +51,10 @@ const routes = [
     path: '/search/:id',
     component: SingerDetail,
   },
+  {
+    path: '/user',
+    component: UserCenter
+  }
 ];
 
 const router = new VueRouter({
