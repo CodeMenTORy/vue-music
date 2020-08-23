@@ -4,7 +4,12 @@
       <search-box ref="searchBox" @query="onQueryChange"></search-box>
     </div>
     <div class="shortcut-wrapper" v-show="!query" ref="shortcutWrapper">
-      <scroll class="shortcut" ref="shortcut" :data="shortcut">
+      <scroll
+        :refreshDelay="refreshDelay"
+        class="shortcut"
+        ref="shortcut"
+        :data="shortcut"
+      >
         <div>
           <div class="hot-key">
             <h1 class="title">热门搜索</h1>
@@ -54,8 +59,8 @@
 
 <script>
 import { getHotKey } from 'api/search';
-import { mapActions, mapGetters } from 'vuex';
-import { playlistMixin } from 'common/js/mixin';
+import { mapActions } from 'vuex';
+import { playlistMixin, searchMixin } from 'common/js/mixin';
 import Scroll from 'components/common/scroll/scroll';
 
 import SearchBox from 'components/content/search-box/searchBox';
@@ -65,7 +70,7 @@ import Confirm from 'components/common/confirm/confirm';
 
 export default {
   name: 'search',
-  mixins: [playlistMixin],
+  mixins: [playlistMixin, searchMixin],
   components: {
     SearchBox,
     Suggest,
@@ -83,7 +88,6 @@ export default {
     shortcut() {
       return this.hotKey.concat(this.searchHistory);
     },
-    ...mapGetters(['searchHistory']),
   },
   created() {
     this._getHotKey();
@@ -95,22 +99,6 @@ export default {
         console.log(res.data.hotkey.slice(0, 10));
         this.hotKey = res.data.hotkey.slice(0, 10);
       });
-    },
-    // 监听输入框的输入
-    onQueryChange(query) {
-      console.log(query);
-      this.query = query;
-    },
-    addQuery(query) {
-      this.$refs.searchBox.setQuery(query);
-    },
-    // 列表滚动时，input失去焦点
-    blurInput() {
-      this.$refs.searchBox.blur();
-    },
-    // 保存搜索历史
-    saveSearch() {
-      this.saveSearchHistory(this.query);
     },
     // 删除搜索历史
     deleteOne(item) {
@@ -127,11 +115,7 @@ export default {
       this.$refs.searchResult.style.bottom = bottom;
       this.$refs.suggest.refresh();
     },
-    ...mapActions([
-      'saveSearchHistory',
-      'deleteSearchHistory',
-      'clearSearchHistory',
-    ]),
+    ...mapActions(['clearSearchHistory']),
   },
   watch: {
     // 当增加搜索历史，刷新滚动

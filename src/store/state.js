@@ -1,5 +1,5 @@
 import { playMode } from 'common/js/config';
-import { loadSearch } from 'common/js/cache';
+import { loadSearch, loadPlay } from 'common/js/cache';
 
 export default {
   singer: {}, // 歌手
@@ -12,4 +12,5 @@ export default {
   disc: {}, // 歌单
   topList: {}, // 排行榜
   searchHistory: loadSearch(), // 搜索历史,从本地读取初始值
+  playHistory: loadPlay(), // 播放历史,从本地读取初始值
 };

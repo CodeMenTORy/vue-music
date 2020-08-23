@@ -39,7 +39,6 @@ export default {
         this.$router.push('/recommend');
       }
       getSongList(this.disc.dissid).then((res) => {
-        console.log(res.data[0].songlist);
         this.songs = this._normalizeSongs(res.data[0].songlist);
       });
     },
@@ -47,7 +46,6 @@ export default {
       let ret = [];
       list.forEach((musicData) => {
         if (musicData.id && musicData.mid) {
-          console.log(createSong(musicData));
           ret.push(createSong(musicData));
         }
       });

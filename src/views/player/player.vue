@@ -112,11 +112,12 @@
             ></i>
           </progress-circle>
         </div>
-        <div class="control">
+        <div class="control" @click.stop="showPlaylist">
           <i class="icon-playlist"></i>
         </div>
       </div>
     </transition>
+    <playlist ref="playlist"></playlist>
     <audio
       :src="currentSong.url"
       ref="audio"
@@ -129,22 +130,24 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations } from 'vuex';
+import { mapGetters, mapMutations, mapActions } from 'vuex';
 import animations from 'create-keyframe-animation';
 import { prefixStyle } from 'common/js/dom';
 import { playMode } from 'common/js/config';
-import { shuffle } from 'common/js/utils';
 import Lyric from 'lyric-parser';
 import Scroll from 'components/common/scroll/scroll';
+import { playerMixin } from 'common/js/mixin';
 
 import ProgressBar from './childPlayer/progress-bar/progressBar';
 import ProgressCircle from './childPlayer/progress-circle/progressCircle';
+import Playlist from './childPlayer/playlist/playlist';
 
 const transform = prefixStyle('transform');
 const transitionDuration = prefixStyle('transitionDuration');
 
 export default {
   name: 'player',
+  mixins: [playerMixin],
   data() {
     return {
       songReady: false,
@@ -162,17 +165,10 @@ export default {
     ProgressBar,
     ProgressCircle,
     Scroll,
+    Playlist,
   },
   computed: {
-    ...mapGetters([
-      'fullScreen',
-      'playlist',
-      'currentSong',
-      'playing',
-      'currentIndex',
-      'mode',
-      'sequenceList',
-    ]),
+    ...mapGetters(['fullScreen', 'currentIndex', 'playing']),
     playIcon() {
       return this.playing ? 'icon-pause' : 'icon-play';
     },
@@ -188,22 +184,12 @@ export default {
     percent() {
       return this.currentTime / this.currentSong.duration;
     },
-    iconMode() {
-      return this.mode === playMode.sequence
-        ? 'icon-sequence'
-        : this.mode === playMode.loop
-        ? 'icon-loop'
-        : 'icon-random';
-    },
   },
   methods: {
     ...mapMutations({
       setFullScreen: 'SET_FULL_SCREEN',
-      setPlayingState: 'SET_PLAYING_STATE',
-      setCurrentIndex: 'SET_CURRENT_INDEX',
-      setPlayMode: 'SET_PLAY_MODE',
-      setPlayList: 'SET_PLAYLIST',
     }),
+    ...mapActions(['savePlayHistory']),
     back() {
       this.setFullScreen(false);
     },
@@ -283,6 +269,8 @@ export default {
     ready() {
       // 标志位，当正在切换歌曲时，点击切换按钮失败
       this.songReady = true;
+      // 保存播放历史
+      this.savePlayHistory(this.currentSong);
     },
     error() {
       // 报错也能保证用户能够切换下一首
@@ -317,26 +305,6 @@ export default {
       if (this.currentLyric) {
         this.currentLyric.seek(currenTime * 1000);
       }
-    },
-    // 播放模式切换
-    changeMode() {
-      const mode = (this.mode + 1) % 3;
-      this.setPlayMode(mode);
-
-      let list = null;
-      if (mode === playMode.random) {
-        list = shuffle(this.sequenceList);
-      } else {
-        list = this.sequenceList;
-      }
-      this.resetCurrentIndex(list);
-      this.setPlayList(list);
-    },
-    resetCurrentIndex(list) {
-      let index = list.findIndex((item) => {
-        return item.id === this.currentSong.id;
-      });
-      this.setCurrentIndex(index);
     },
 
     // 获取歌词
@@ -497,9 +465,18 @@ export default {
         scale,
       };
     },
+
+    // 控制播放列表显示
+    showPlaylist() {
+      this.$refs.playlist.show();
+    },
   },
   watch: {
     currentSong(newSong, oldSong) {
+      // 新歌曲为空时，后面都不执行
+      if (!newSong.id) {
+        return;
+      }
       if (newSong.id === oldSong.id) {
         return;
       }

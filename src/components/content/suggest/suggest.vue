@@ -31,24 +31,24 @@
 </template>
 
 <script>
-import { search } from "api/search";
-import { createSong } from "common/js/song";
-import Singer from "common/js/singer";
-import { mapMutations, mapActions } from "vuex";
+import { search } from 'api/search';
+import { createSong } from 'common/js/song';
+import Singer from 'common/js/singer';
+import { mapMutations, mapActions } from 'vuex';
 
-import Scroll from "components/common/scroll/scroll";
-import Loading from "components/common/loading/loading";
-import NoResult from "components/content/no-result/noResult";
+import Scroll from 'components/common/scroll/scroll';
+import Loading from 'components/common/loading/loading';
+import NoResult from 'components/content/no-result/noResult';
 
-const TYPE_SINGER = "singer";
+const TYPE_SINGER = 'singer';
 const perpage = 20;
 
 export default {
-  name: "suggest",
+  name: 'suggest',
   props: {
     query: {
       type: String,
-      default: "",
+      default: '',
     },
     showSinger: {
       type: Boolean,
@@ -119,9 +119,9 @@ export default {
     // 判断icon的类型
     getIconCls(item) {
       if (item.type === TYPE_SINGER) {
-        return "icon-mine";
+        return 'icon-mine';
       } else {
-        return "icon-music";
+        return 'icon-music';
       }
     },
     // 判断是否显示歌手
@@ -157,20 +157,20 @@ export default {
       } else {
         this.insertSong(item);
       }
-      this.$emit("select");
+      this.$emit('select');
     },
     // 监听列表滚动
     listScroll() {
-      this.$emit("listScroll");
+      this.$emit('listScroll');
     },
     // 代理scroll刷新方法给外部使用
     refresh() {
-      this.$refs.suggest.refresh()
+      this.$refs.suggest.refresh();
     },
     ...mapMutations({
-      setSinger: "SET_SINGER",
+      setSinger: 'SET_SINGER',
     }),
-    ...mapActions(["insertSong"]),
+    ...mapActions(['insertSong']),
   },
 };
 </script>

@@ -74,7 +74,7 @@ export default {
     scrollTo(x, y, time = 300) {
       this.scroll && this.scroll.scrollTo(x, y, time);
     },
-    scrollToElement(el, time) {
+    scrollToElement(el, time = 200) {
       this.scroll && this.scroll.scrollToElement(el, time);
     },
     refresh() {
