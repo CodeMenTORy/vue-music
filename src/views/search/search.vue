@@ -1,66 +1,49 @@
 <template>
-  <div class="search">
-    <div class="search-box">
-      <search-box ref="searchBox" @query="onQueryChange"></search-box>
-    </div>
-    <div class="shortcut-wrapper" v-show="!query" ref="shortcutWrapper">
-      <scroll
-        :refreshDelay="refreshDelay"
-        class="shortcut"
-        ref="shortcut"
-        :data="shortcut"
-      >
-        <div>
-          <div class="hot-key">
-            <h1 class="title">热门搜索</h1>
-            <ul>
-              <li
-                class="item"
-                v-for="(item, index) in hotKey"
-                :key="index"
-                @click="addQuery(item.k)"
-              >
-                <span>{{ item.k }}</span>
-              </li>
-            </ul>
-          </div>
-          <div class="search-history" v-show="searchHistory.length">
-            <h1 class="title">
-              <span class="text">搜索历史</span>
-              <span class="clear" @click="showConfirm">
-                <i class="icon-clear"></i>
-              </span>
-            </h1>
-            <search-list
-              :searches="searchHistory"
-              @select="addQuery"
-              @delete="deleteOne"
-            ></search-list>
-          </div>
-        </div>
-      </scroll>
-    </div>
-    <div class="search-result" v-show="query" ref="searchResult">
-      <suggest
-        :query="query"
-        @listScroll="blurInput"
-        @select="saveSearch"
-        ref="suggest"
-      ></suggest>
-    </div>
-    <confirm
-      text="是否清空所有搜索历史"
-      confirmBtnText="清空"
-      ref="confirm"
-      @confirm="clearSearchHistory"
-    ></confirm>
+<div class="search">
+  <div class="search-box">
+    <search-box ref="searchBox" @query="onQueryChange"></search-box>
   </div>
+  <div class="shortcut-wrapper" v-show="!query" ref="shortcutWrapper">
+    <scroll :refreshDelay="refreshDelay" class="shortcut" ref="shortcut" :data="shortcut">
+      <div>
+        <div class="hot-key">
+          <h1 class="title">热门搜索</h1>
+          <ul>
+            <li class="item" v-for="(item, index) in hotKey" :key="index" @click="addQuery(item.k)">
+              <span>{{ item.k }}</span>
+            </li>
+          </ul>
+        </div>
+        <div class="search-history" v-show="searchHistory.length">
+          <h1 class="title">
+            <span class="text">搜索历史</span>
+            <span class="clear" @click="showConfirm">
+              <i class="icon-clear"></i>
+            </span>
+          </h1>
+          <search-list :searches="searchHistory" @select="addQuery" @delete="deleteOne"></search-list>
+        </div>
+      </div>
+    </scroll>
+  </div>
+  <div class="search-result" v-show="query" ref="searchResult">
+    <suggest :query="query" @listScroll="blurInput" @select="saveSearch" ref="suggest"></suggest>
+  </div>
+  <confirm text="是否清空所有搜索历史" confirmBtnText="清空" ref="confirm" @confirm="clearSearchHistory"></confirm>
+</div>
 </template>
 
 <script>
-import { getHotKey } from 'api/search';
-import { mapActions } from 'vuex';
-import { playlistMixin, searchMixin } from 'common/js/mixin';
+import {
+  getHotKey
+} from 'api/search';
+import {
+  mapActions
+} from 'vuex';
+import {
+  playlistMixin,
+  searchMixin
+} from 'common/js/mixin';
 import Scroll from 'components/common/scroll/scroll';
 
 import SearchBox from 'components/content/search-box/searchBox';
@@ -96,7 +79,6 @@ export default {
     // 获取热频词
     _getHotKey() {
       getHotKey().then((res) => {
-        console.log(res.data.hotkey.slice(0, 10));
         this.hotKey = res.data.hotkey.slice(0, 10);
       });
     },
@@ -130,7 +112,7 @@ export default {
 };
 </script>
 
-<style lang="stylus" rel="stylesheet/stylus">
+<style lang="stylus">
 @import '~common/stylus/variable';
 @import '~common/stylus/mixin';
 

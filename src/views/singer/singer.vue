@@ -1,14 +1,21 @@
 <template>
-  <div class="singer" ref="singer">
-    <list-view :data="singerList" @select="selectSinger" ref="list"></list-view>
-  </div>
+<div class="singer" ref="singer">
+  <list-view :data="singerList" @select="selectSinger" ref="list"></list-view>
+</div>
 </template>
 
 <script>
 import Vue from 'vue';
-import { mapMutations } from 'vuex';
-import { getSingerList, getIndexCategory } from 'api/singer';
-import { playlistMixin } from 'common/js/mixin';
+import {
+  mapMutations
+} from 'vuex';
+import {
+  getSingerList,
+  getIndexCategory
+} from 'api/singer';
+import {
+  playlistMixin
+} from 'common/js/mixin';
 
 import ListView from 'components/common/listView/listview';
 
@@ -44,7 +51,6 @@ export default {
               Vue.set(this.singerList[index], 'singer', res.data);
             });
           });
-          console.log(this.singerList);
         });
     },
     ...mapMutations({
@@ -62,7 +68,7 @@ export default {
 };
 </script>
 
-<style scoped lang="stylus" rel="stylesheet/stylus">
+<style lang="stylus" scoped>
 .singer {
   position: relative;
   bottom: 0;

@@ -1,40 +1,34 @@
 <template>
-  <scroll
-    class="suggest"
-    :data="result"
-    :pullUpLoad="pullup"
-    :beforeScroll="beforeScroll"
-    @pullingUp="searchMore"
-    @beforeScroll="listScroll"
-    ref="suggest"
-  >
-    <ul class="suggest-list">
-      <li
-        @click="selectItem(item)"
-        class="suggest-item"
-        v-for="(item, index) in result"
-        :key="index"
-      >
-        <div class="icon">
-          <i :class="getIconCls(item)"></i>
-        </div>
-        <div class="name">
-          <p class="text" v-html="getDiplayName(item)"></p>
-        </div>
-      </li>
-      <loading v-show="hasMore" :title="''"></loading>
-    </ul>
-    <div class="no-result-wrapper" v-show="!hasMore && !result.length">
-      <no-result title="抱歉，暂无搜索结果"></no-result>
-    </div>
-  </scroll>
+<scroll class="suggest" :data="result" :pullUpLoad="pullup" :beforeScroll="beforeScroll" @pullingUp="searchMore" @beforeScroll="listScroll" ref="suggest">
+  <ul class="suggest-list">
+    <li @click="selectItem(item)" class="suggest-item" v-for="(item, index) in result" :key="index">
+      <div class="icon">
+        <i :class="getIconCls(item)"></i>
+      </div>
+      <div class="name">
+        <p class="text" v-html="getDiplayName(item)"></p>
+      </div>
+    </li>
+    <loading v-show="hasMore" :title="''"></loading>
+  </ul>
+  <div class="no-result-wrapper" v-show="!hasMore && !result.length">
+    <no-result title="抱歉，暂无搜索结果"></no-result>
+  </div>
+</scroll>
 </template>
 
 <script>
-import { search } from 'api/search';
-import { createSong } from 'common/js/song';
+import {
+  search
+} from 'api/search';
+import {
+  createSong
+} from 'common/js/song';
 import Singer from 'common/js/singer';
-import { mapMutations, mapActions } from 'vuex';
+import {
+  mapMutations,
+  mapActions
+} from 'vuex';
 
 import Scroll from 'components/common/scroll/scroll';
 import Loading from 'components/common/loading/loading';
@@ -82,7 +76,6 @@ export default {
       this.hasMore = true;
       this.$refs.suggest.scrollTo(0, 0);
       search(this.query, this.page, this.showSinger, perpage).then((res) => {
-        console.log(res);
         this.result = this._genResult(res.data);
         this._checkMore(res.data);
       });
@@ -90,7 +83,12 @@ export default {
     _genResult(data) {
       let ret = [];
       if (data.zhida && data.zhida.singerid) {
-        ret.push({ ...data.zhida, ...{ type: TYPE_SINGER } });
+        ret.push({
+          ...data.zhida,
+          ...{
+            type: TYPE_SINGER
+          }
+        });
       }
       if (data.song) {
         ret = ret.concat(this._normalizeSongs(data.song.list));
@@ -175,7 +173,7 @@ export default {
 };
 </script>
 
-<style scoped lang="stylus" rel="stylesheet/stylus">
+<style lang="stylus" scoped>
 @import '~common/stylus/variable';
 @import '~common/stylus/mixin';
 

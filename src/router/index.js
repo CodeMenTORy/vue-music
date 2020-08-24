@@ -5,7 +5,7 @@ const Recommend = () => import('views/recommend/recommend');
 const Singer = () => import('views/singer/singer');
 const Rank = () => import('views/rank/rank');
 const Search = () => import('views/search/search');
-const SingerDetail = () => import('views/singerDetail/singerDetail');
+const SingerDetail = () => import('views/singer/childSinger/singerDetail/singerDetail');
 const Disc = () => import('views/recommend/childRecommend/disc/disc');
 const TopList = () => import('views/rank/childRank/top-list/topList');
 const UserCenter = () => import('views/user-center/userCenter')
