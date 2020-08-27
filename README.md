@@ -2,10 +2,6 @@
 
 该项目是以 **Vue.js （2.x）**为框架，加上Vue生态全家桶而开发出的、媲美原生的移动端音乐 WebApp，媲美原生，酷炫动画、完美交互、功能完善。
 
-👉 学习自黄轶老师，慕课网学习地址: http://coding.imooc.com/class/107.html
-
-![图片预览](https://coding.imooc.com/static/module/class/content/img/107/section2-1.png)
-
 ## 个人收获
 
 - 对`vue`的特性（数据的双向绑定/响应式更新/组件化）有了更深的理解，对`vue`的开发流程（目录结构分类/组件分类以及复用性/业务逻辑规划/路由规划）有更清晰的认识
